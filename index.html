@@ -1,18 +1,8 @@
-<?php 
-include 'koneksi.php'; 
-session_start();
-
-// Set bahasa (default: en)
-$lang = $_GET['lang'] ?? 'en';
-if (!in_array($lang, ['en', 'id'])) $lang = 'en';
-$text = include "lang/$lang.php";
-?>
-
 <!DOCTYPE html>
-<html lang="<?= $lang ?>">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title><?= $text['brand'] ?> | Digital Product Marketplace</title>
+  <title>DigitalMarket | Digital Product Marketplace</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     section { padding: 100px 0; }
@@ -97,23 +87,22 @@ $text = include "lang/$lang.php";
       display: none !important;
     }
   </style>
-  </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="#"><?= $text['brand'] ?></a>
+    <a class="navbar-brand" href="#">DigitalMarket</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#about"><?= $text['about'] ?></a></li>
-        <li class="nav-item"><a class="nav-link" href="#konten"><?= $text['content'] ?></a></li>
-        <li class="nav-item"><a class="nav-link" href="#blog"><?= $text['blog'] ?></a></li>
-        <li class="nav-item"><a class="nav-link" href="#contact"><?= $text['contact'] ?></a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#konten">Content</a></li>
+        <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">🌐</a>
           <ul class="dropdown-menu">
@@ -129,15 +118,15 @@ $text = include "lang/$lang.php";
 <!-- About Section -->
 <section id="about" class="bg-light">
   <div class="container">
-    <h2 class="text-center mb-4"><?= $text['about'] ?></h2>
-    <p class="text-center"><?= $text['about_text'] ?></p>
+    <h2 class="text-center mb-4">About</h2>
+    <p class="text-center">Welcome to our digital marketplace where you can find various digital products for your needs.</p>
   </div>
 </section>
 
 <!-- Konten Section: Digital Products -->
 <section id="konten">
   <div class="container">
-    <h2 class="text-center mb-4"><?= $text['content'] ?></h2>
+    <h2 class="text-center mb-4">Content</h2>
     <div class="row g-4">
 
       <!-- Product 1 -->
@@ -225,7 +214,7 @@ $text = include "lang/$lang.php";
 <!-- Blog Section --> 
 <section id="blog" class="bg-light">
   <div class="container">
-    <h2 class="text-center mb-4"><?= $text['blog'] ?></h2>
+    <h2 class="text-center mb-4">Blog</h2>
 
     <div class="row g-4">
       <!-- Blog Post 1 -->
@@ -239,16 +228,16 @@ $text = include "lang/$lang.php";
                  alt="Blog 1">
             <div class="card-body d-flex flex-column">
               <h5 class="card-title" style="min-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                <?= $text['blog1_title'] ?>
+                How to Build a Website with PHP
               </h5>
               <p class="card-text flex-grow-1" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
-                <?= $text['blog1_excerpt'] ?>
+                Learn the basics of building a website using PHP from scratch with this comprehensive guide for beginners.
               </p>
               <button class="btn btn-outline-primary btn-sm mt-auto align-self-center" 
                       style="width: 150px;"
                       data-bs-toggle="modal" 
                       data-bs-target="#blogModal1">
-                <?= $text['read_more'] ?>
+                Read More
               </button>
             </div>
           </div>
@@ -263,16 +252,16 @@ $text = include "lang/$lang.php";
                  alt="Blog 2">
             <div class="card-body d-flex flex-column">
               <h5 class="card-title" style="min-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                <?= $text['blog2_title'] ?>
+                Modern Web Design Trends 2025
               </h5>
               <p class="card-text flex-grow-1" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
-                <?= $text['blog2_excerpt'] ?>
+                Discover the latest web design trends that will dominate in 2025 and how to implement them in your projects.
               </p>
               <button class="btn btn-outline-primary btn-sm mt-auto align-self-center" 
                       style="width: 150px;"
                       data-bs-toggle="modal" 
                       data-bs-target="#blogModal2">
-                <?= $text['read_more'] ?>
+                Read More
               </button>
             </div>
           </div>
@@ -287,16 +276,16 @@ $text = include "lang/$lang.php";
                  alt="Blog 3">
             <div class="card-body d-flex flex-column">
               <h5 class="card-title" style="min-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                <?= $text['blog3_title'] ?>
+                Creating Modular Website Components
               </h5>
               <p class="card-text flex-grow-1" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
-                <?= $text['blog3_excerpt'] ?>
+                Learn how to create reusable modular components for your website to improve development efficiency.
               </p>
               <button class="btn btn-outline-primary btn-sm mt-auto align-self-center" 
                       style="width: 150px;"
                       data-bs-toggle="modal" 
                       data-bs-target="#blogModal3">
-                <?= $text['read_more'] ?>
+                Read More
               </button>
             </div>
           </div>
@@ -308,14 +297,26 @@ $text = include "lang/$lang.php";
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="blogModalLabel1"><?= $text['blog1_title'] ?></h5>
+              <h5 class="modal-title" id="blogModalLabel1">How to Build a Website with PHP</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-              <?= $text['blog1_full'] ?>
+              <p>Building a website with PHP is a fundamental skill for web developers. PHP is a server-side scripting language designed for web development but also used as a general-purpose programming language.</p>
+              <p>In this comprehensive guide, we'll walk you through the entire process of building a website with PHP from scratch. You'll learn about setting up your development environment, creating your first PHP page, connecting to a database, and much more.</p>
+              <p>PHP is particularly suited to web development because it can be embedded into HTML. This makes it easy to mix PHP code with HTML markup, allowing you to create dynamic web pages that can change based on user input or other variables.</p>
+              <p>Some key topics we'll cover include:</p>
+              <ul>
+                <li>Setting up a local development environment with XAMPP or MAMP</li>
+                <li>Basic PHP syntax and structures</li>
+                <li>Working with forms and user input</li>
+                <li>Connecting to MySQL databases</li>
+                <li>Creating reusable components</li>
+                <li>Security best practices</li>
+              </ul>
+              <p>By the end of this guide, you'll have a solid foundation in PHP web development and be able to create your own dynamic websites.</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -326,14 +327,24 @@ $text = include "lang/$lang.php";
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="blogModalLabel2"><?= $text['blog2_title'] ?></h5>
+              <h5 class="modal-title" id="blogModalLabel2">Modern Web Design Trends 2025</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-              <?= $text['blog2_full'] ?>
+              <p>As we move further into the digital age, web design continues to evolve at a rapid pace. The year 2025 brings exciting new trends that are shaping how we experience the web.</p>
+              <p>One of the most significant trends is the continued emphasis on mobile-first design. With mobile devices accounting for over 60% of web traffic, designers must prioritize mobile experiences while ensuring desktop compatibility.</p>
+              <p>Other key trends for 2025 include:</p>
+              <ul>
+                <li><strong>Neumorphism:</strong> A design style that creates soft, extruded shapes with subtle shadows that mimic physical objects.</li>
+                <li><strong>Dark Mode:</strong> More websites are offering dark mode options to reduce eye strain and save battery life on devices.</li>
+                <li><strong>Micro-interactions:</strong> Small animations that provide feedback and make interfaces feel more responsive and engaging.</li>
+                <li><strong>3D Elements:</strong> With improved browser capabilities, 3D graphics are becoming more common in web design.</li>
+                <li><strong>Voice User Interfaces:</strong> As voice assistants become more prevalent, websites are adapting to voice commands.</li>
+              </ul>
+              <p>Implementing these trends requires a balance between aesthetics and functionality. While it's important to stay current, the user experience should always remain the top priority.</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -344,14 +355,32 @@ $text = include "lang/$lang.php";
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="blogModalLabel3"><?= $text['blog3_title'] ?></h5>
+              <h5 class="modal-title" id="blogModalLabel3">Creating Modular Website Components</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-              <?= $text['blog3_full'] ?>
+              <p>Modular design is revolutionizing web development by breaking down websites into reusable components. This approach offers numerous benefits including improved efficiency, consistency, and maintainability.</p>
+              <p>At its core, modular design involves creating independent components that can be combined in various ways to build complete interfaces. These components should be self-contained and have a single responsibility.</p>
+              <p>Key advantages of modular website components:</p>
+              <ul>
+                <li><strong>Reusability:</strong> Components can be used across multiple pages or projects.</li>
+                <li><strong>Consistency:</strong> Ensures a uniform look and feel throughout the website.</li>
+                <li><strong>Easier Maintenance:</strong> Changes can be made in one place and propagate throughout the site.</li>
+                <li><strong>Team Collaboration:</strong> Different team members can work on different components simultaneously.</li>
+                <li><strong>Performance:</strong> Components can be loaded independently as needed.</li>
+              </ul>
+              <p>To implement modular design effectively:</p>
+              <ol>
+                <li>Identify common UI patterns in your design</li>
+                <li>Break these down into discrete components</li>
+                <li>Define clear interfaces for each component</li>
+                <li>Document component usage and variations</li>
+                <li>Establish a system for component organization</li>
+              </ol>
+              <p>Modern frontend frameworks like React, Vue, and Angular have embraced component-based architecture, making it easier than ever to implement modular design principles.</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -364,21 +393,21 @@ $text = include "lang/$lang.php";
 <!-- Contact Section -->
 <section id="contact">
   <div class="container">
-    <h2 class="text-center mb-4"><?= $text['contact'] ?></h2>
+    <h2 class="text-center mb-4">Contact</h2>
     <form action="proses_contact.php" method="POST" class="w-50 mx-auto">
       <div class="mb-3">
-        <label for="nama" class="form-label"><?= $text['name'] ?></label>
+        <label for="nama" class="form-label">Name</label>
         <input type="text" name="nama" class="form-control" required>
       </div>
       <div class="mb-3">
-        <label for="email" class="form-label"><?= $text['email'] ?></label>
+        <label for="email" class="form-label">Email</label>
         <input type="email" name="email" class="form-control" required>
       </div>
       <div class="mb-3">
-        <label for="pesan" class="form-label"><?= $text['message'] ?></label>
+        <label for="pesan" class="form-label">Message</label>
         <textarea name="pesan" rows="4" class="form-control" required></textarea>
       </div>
-      <button type="submit" class="btn btn-primary"><?= $text['send'] ?></button>
+      <button type="submit" class="btn btn-primary">Send</button>
     </form>
   </div>
 </section>
@@ -386,8 +415,8 @@ $text = include "lang/$lang.php";
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4 mt-5">
   <div class="container">
-    <p class="mb-1">© 2025 <?= $text['brand'] ?>. All rights reserved.</p>
-    <small><?= $text['footer'] ?></small>
+    <p class="mb-1">© 2025 DigitalMarket. All rights reserved.</p>
+    <small>Digital products marketplace for all your needs</small>
   </div>
 </footer>
 
@@ -408,11 +437,11 @@ $text = include "lang/$lang.php";
     <p><strong>Price:</strong> $<span id="modal_product_price"></span></p>
 
     <div class="mb-3">
-      <label class="form-label"><?= $text['name'] ?></label>
+      <label class="form-label">Name</label>
       <input type="text" id="buyer_name" class="form-control" required>
     </div>
     <div class="mb-3">
-      <label class="form-label"><?= $text['email'] ?></label>
+      <label class="form-label">Email</label>
       <input type="email" id="buyer_email" class="form-control" required>
     </div>
     <div class="mb-3">
@@ -548,7 +577,7 @@ $text = include "lang/$lang.php";
         <h4 class="mb-3">Thank you for your purchase!</h4>
         <p>Your payment has been processed successfully.</p>
         <p>We've sent the download link to <strong id="confirmation-email"></strong></p>
-        <p>Order ID: <strong>ORD-<?= rand(1000, 9999) ?></strong></p>
+        <p>Order ID: <strong>ORD-1234</strong></p>
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-primary" onclick="closeAllModals()">Back to Home</button>
@@ -633,7 +662,7 @@ $text = include "lang/$lang.php";
   function closeAllModals() {
     bootstrap.Modal.getInstance(document.getElementById('paymentConfirmationModal')).hide();
     // You could redirect to home page here if needed
-    // window.location.href = 'index.php';
+    // window.location.href = 'index.html';
   }
 </script>
 
