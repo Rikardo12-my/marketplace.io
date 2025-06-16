@@ -1,35 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>DigitalMarket | Digital Product Marketplace</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    section { padding: 100px 0; }
-    html { scroll-behavior: smooth; }
-    .card img { height: 200px; object-fit: cover; }
-    
-    /* Checkout and Payment Container Styles */
-    .checkout-container, .payment-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      background: white;
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-top: 56px;
+      /* For fixed navbar */
     }
-    
-    /* Payment Steps Indicator */
+
+    section {
+      padding: 100px 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Product Card Styles */
+    .card img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-text {
+      flex-grow: 1;
+    }
+
+    /* Checkout Page Styles */
+    .checkout-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-info {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .product-description {
+      color: #6c757d;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .btn-cancel {
+      background-color: #f8f9fa;
+      color: #495057;
+      border: 1px solid #dee2e6;
+    }
+
+    .btn-cancel:hover {
+      background-color: #e9ecef;
+    }
+
+    /* Payment Page Styles */
+    .payment-container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
     .payment-steps {
       display: flex;
       justify-content: space-between;
       margin-bottom: 30px;
+      position: relative;
     }
+
     .step {
       text-align: center;
       flex: 1;
       position: relative;
+      z-index: 1;
     }
+
     .step-number {
       width: 40px;
       height: 40px;
@@ -41,32 +103,44 @@
       margin: 0 auto 10px;
       font-weight: bold;
     }
+
     .step.active .step-number {
       background-color: #0d6efd;
       color: white;
     }
+
     .step.completed .step-number {
       background-color: #198754;
       color: white;
     }
-    .step:not(:last-child)::after {
-      content: '';
+
+    .step-line {
       position: absolute;
       top: 20px;
-      left: 70%;
-      width: 60%;
+      left: 0;
+      right: 0;
       height: 2px;
       background-color: #e9ecef;
+      z-index: 0;
     }
-    .step.completed:not(:last-child)::after {
+
+    .step-progress {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      height: 2px;
       background-color: #198754;
+      z-index: 1;
+      transition: width 0.3s ease;
     }
-    
-    /* Payment Method Details */
-    .payment-method-details {
-      display: none;
+
+    .order-summary {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
     }
-    
+
     /* Modal Overlay */
     .modal-overlay {
       position: fixed;
@@ -74,152 +148,161 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0, 0, 0, 0.5);
       z-index: 1040;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    
-    /* Hide elements */
+
     .d-none {
       display: none !important;
     }
   </style>
 </head>
+
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-  <div class="container">
-    <a class="navbar-brand" href="#">DigitalMarket</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#konten">Content</a></li>
-        <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">🌐</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="?lang=id">🇮🇩 Indonesia</a></li>
-            <li><a class="dropdown-item" href="?lang=en">🇬🇧 English</a></li>
-          </ul>
-        </li>
-      </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">DigitalMarket</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#products">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">🌐</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="?lang=id">🇮🇩 Indonesia</a></li>
+              <li><a class="dropdown-item" href="?lang=en">🇬🇧 English</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<!-- About Section -->
-<section id="about" class="bg-light">
-  <div class="container">
-    <h2 class="text-center mb-4">About</h2>
-    <p class="text-center">Welcome to our digital marketplace where you can find various digital products for your needs.</p>
-  </div>
-</section>
-
-<!-- Konten Section: Digital Products -->
-<section id="konten">
-  <div class="container">
-    <h2 class="text-center mb-4">Content</h2>
-    <div class="row g-4">
-
-      <!-- Product 1 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="https://m.media-amazon.com/images/I/61oHnQP0sgL._UF1000,1000_QL80_.jpg" class="card-img-top" alt="eBook">
-          <div class="card-body">
-            <h5 class="card-title">Mastering PHP eBook</h5>
-            <p class="card-text">Learn PHP from scratch to advanced level with this complete eBook guide.</p>
-            <p><strong>$15</strong></p>
-            <button type="button" class="btn btn-primary w-100" onclick="showBuyModal(1, 'Mastering PHP eBook', '15')">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 2 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="https://themes.getbootstrap.com/wp-content/uploads/2019/08/quick-website-ui-kit-1.1.0-cover.jpg" class="card-img-top" alt="Template">
-          <div class="card-body">
-            <h5 class="card-title">UI Web Template Pack</h5>
-            <p class="card-text">Download premium quality UI templates for your next web project.</p>
-            <p><strong>$25</strong></p>
-            <button type="button" class="btn btn-primary w-100" onclick="showBuyModal(2, 'UI Web Template Pack', '25')">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 3 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="https://static1.squarespace.com/static/594d20319f745615af77c49b/594f8254e3df282d44afdec4/594fcfa69de4bbe55e21f01b/1505063665554/1.jpg?format=1500w" class="card-img-top" alt="Music">
-          <div class="card-body">
-            <h5 class="card-title">Background Music Pack</h5>
-            <p class="card-text">A royalty-free music pack for your YouTube, podcast, and game projects.</p>
-            <p><strong>$10</strong></p>
-            <button type="button" class="btn btn-primary w-100" onclick="showBuyModal(3, 'Background Music Pack', '10')">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 4 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQveH2X0ZDzbbvEHsf8ddqV_RrvLgifRQa4pA&s" class="card-img-top" alt="Icon Pack">
-          <div class="card-body">
-            <h5 class="card-title">Modern Icon Pack</h5>
-            <p class="card-text">A collection of vector icons for apps, websites, and graphic projects.</p>
-            <p><strong>$12</strong></p>
-            <button type="button" class="btn btn-primary w-100" onclick="showBuyModal(4, 'Modern Icon Pack', '12')">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 5 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="https://images.unsplash.com/photo-1605379399642-870262d3d051" class="card-img-top" alt="Video Backgrounds">
-          <div class="card-body">
-            <h5 class="card-title">HD Video Backgrounds</h5>
-            <p class="card-text">High-quality looping video backgrounds for websites or presentations.</p>
-            <p><strong>$18</strong></p>
-            <button type="button" class="btn btn-primary w-100" onclick="showBuyModal(5, 'HD Video Backgrounds', '18')">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 6 -->
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="https://img.youtube.com/vi/otJiSK_-9aI/sddefault.jpg" class="card-img-top" alt="Photo Pack">
-          <div class="card-body">
-            <h5 class="card-title">Nature Photo Pack</h5>
-            <p class="card-text">A curated pack of stunning royalty-free nature and landscape photos.</p>
-            <p><strong>$9</strong></p>
-            <button type="button" class="btn btn-primary w-100" onclick="showBuyModal(6, 'Nature Photo Pack', '9')">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
+  <!-- About Section -->
+  <section id="about" class="bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">About DigitalMarket</h2>
+      <p class="text-center">Welcome to our digital marketplace where you can find various digital products for your
+        needs.</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Blog Section --> 
-<section id="blog" class="bg-light">
-  <div class="container">
-    <h2 class="text-center mb-4">Blog</h2>
+  <!-- Products Section -->
+  <section id="products">
+    <div class="container">
+      <h2 class="text-center mb-4">Our Products</h2>
+      <div class="row g-4">
 
-    <div class="row g-4">
-      <!-- Blog Post 1 -->
+        <!-- Product 1 -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://m.media-amazon.com/images/I/61oHnQP0sgL._UF1000,1000_QL80_.jpg" class="card-img-top"
+              alt="eBook">
+            <div class="card-body">
+              <h5 class="card-title">Mastering PHP eBook</h5>
+              <p class="card-text">Learn PHP from scratch to advanced level with this complete eBook guide.</p>
+              <p><strong>$15</strong></p>
+              <button type="button" class="btn btn-primary w-100"
+                onclick="showCheckout(1, 'Mastering PHP eBook', '15', 'Learn PHP from scratch to advanced level with this complete eBook guide.')">Buy Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://themes.getbootstrap.com/wp-content/uploads/2019/08/quick-website-ui-kit-1.1.0-cover.jpg"
+              class="card-img-top" alt="Template">
+            <div class="card-body">
+              <h5 class="card-title">UI Web Template Pack</h5>
+              <p class="card-text">Download premium quality UI templates for your next web project.</p>
+              <p><strong>$25</strong></p>
+              <button type="button" class="btn btn-primary w-100"
+                onclick="showCheckout(2, 'UI Web Template Pack', '25', 'Download premium quality UI templates for your next web project.')">Buy Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img
+              src="https://static1.squarespace.com/static/594d20319f745615af77c49b/594f8254e3df282d44afdec4/594fcfa69de4bbe55e21f01b/1505063665554/1.jpg?format=1500w"
+              class="card-img-top" alt="Music">
+            <div class="card-body">
+              <h5 class="card-title">Background Music Pack</h5>
+              <p class="card-text">A royalty-free music pack for your YouTube, podcast, and game projects.</p>
+              <p><strong>$10</strong></p>
+              <button type="button" class="btn btn-primary w-100"
+                onclick="showCheckout(3, 'Background Music Pack', '10', 'A royalty-free music pack for your YouTube, podcast, and game projects.')">Buy Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQveH2X0ZDzbbvEHsf8ddqV_RrvLgifRQa4pA&s"
+              class="card-img-top" alt="Icon Pack">
+            <div class="card-body">
+              <h5 class="card-title">Modern Icon Pack</h5>
+              <p class="card-text">A collection of vector icons for apps, websites, and graphic projects.</p>
+              <p><strong>$12</strong></p>
+              <button type="button" class="btn btn-primary w-100"
+                onclick="showCheckout(4, 'Modern Icon Pack', '12', 'A collection of vector icons for apps, websites, and graphic projects.')">Buy Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://images.unsplash.com/photo-1605379399642-870262d3d051" class="card-img-top"
+              alt="Video Backgrounds">
+            <div class="card-body">
+              <h5 class="card-title">HD Video Backgrounds</h5>
+              <p class="card-text">High-quality looping video backgrounds for websites or presentations.</p>
+              <p><strong>$18</strong></p>
+              <button type="button" class="btn btn-primary w-100"
+                onclick="showCheckout(5, 'HD Video Backgrounds', '18', 'High-quality looping video backgrounds for websites or presentations.')">Buy Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://img.youtube.com/vi/otJiSK_-9aI/sddefault.jpg" class="card-img-top" alt="Photo Pack">
+            <div class="card-body">
+              <h5 class="card-title">Nature Photo Pack</h5>
+              <p class="card-text">A curated pack of stunning royalty-free nature and landscape photos.</p>
+              <p><strong>$9</strong></p>
+              <button type="button" class="btn btn-primary w-100"
+                onclick="showCheckout(6, 'Nature Photo Pack', '9', 'A curated pack of stunning royalty-free nature and landscape photos.')">Buy Now</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section id="blog" class="bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">Blog</h2>
       <div class="row">
-        <!-- Blog Post 1 -->
         <div class="col-md-4 mb-4">
           <div class="card h-100">
             <img src="https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2019/08/simple-php-website.jpg" 
@@ -242,25 +325,23 @@
             </div>
           </div>
         </div>
-
         <!-- Blog Post 2 -->
         <div class="col-md-4 mb-4">
           <div class="card h-100">
-            <img src="https://getbootstrap.com/docs/4.0/examples/screenshots/album.png" 
-                 class="card-img-top img-fluid" 
-                 style="height: 200px; object-fit: cover;" 
-                 alt="Blog 2">
+            <img src="https://getbootstrap.com/docs/4.0/examples/screenshots/album.png" class="card-img-top img-fluid"
+              style="height: 200px; object-fit: cover;" alt="Blog 2">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title" style="min-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+              <h5 class="card-title"
+                style="min-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
                 Modern Web Design Trends 2025
               </h5>
-              <p class="card-text flex-grow-1" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
-                Discover the latest web design trends that will dominate in 2025 and how to implement them in your projects.
+              <p class="card-text flex-grow-1"
+                style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
+                Discover the latest web design trends that will dominate in 2025 and how to implement them in your
+                projects.
               </p>
-              <button class="btn btn-outline-primary btn-sm mt-auto align-self-center" 
-                      style="width: 150px;"
-                      data-bs-toggle="modal" 
-                      data-bs-target="#blogModal2">
+              <button class="btn btn-outline-primary btn-sm mt-auto align-self-center" style="width: 150px;"
+                data-bs-toggle="modal" data-bs-target="#blogModal2">
                 Read More
               </button>
             </div>
@@ -270,28 +351,26 @@
         <!-- Blog Post 3 -->
         <div class="col-md-4 mb-4">
           <div class="card h-100">
-            <img src="https://www.wowmakers.com/static/6160493db90fe09f8bce1f223a1af586/Componenets-of-a-Modular-Website.jpg" 
-                 class="card-img-top img-fluid" 
-                 style="height: 200px; object-fit: cover;" 
-                 alt="Blog 3">
+            <img
+              src="https://www.wowmakers.com/static/6160493db90fe09f8bce1f223a1af586/Componenets-of-a-Modular-Website.jpg"
+              class="card-img-top img-fluid" style="height: 200px; object-fit: cover;" alt="Blog 3">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title" style="min-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+              <h5 class="card-title"
+                style="min-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
                 Creating Modular Website Components
               </h5>
-              <p class="card-text flex-grow-1" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
+              <p class="card-text flex-grow-1"
+                style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
                 Learn how to create reusable modular components for your website to improve development efficiency.
               </p>
-              <button class="btn btn-outline-primary btn-sm mt-auto align-self-center" 
-                      style="width: 150px;"
-                      data-bs-toggle="modal" 
-                      data-bs-target="#blogModal3">
+              <button class="btn btn-outline-primary btn-sm mt-auto align-self-center" style="width: 150px;"
+                data-bs-toggle="modal" data-bs-target="#blogModal3">
                 Read More
               </button>
             </div>
           </div>
         </div>
       </div>
-
       <!-- Modal Blog 1 -->
       <div class="modal fade" id="blogModal1" tabindex="-1" aria-labelledby="blogModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -385,89 +464,88 @@
           </div>
         </div>
       </div>
-
     </div>
-  </div>
-</section>
-
-<!-- Contact Section -->
-<section id="contact">
-  <div class="container">
-    <h2 class="text-center mb-4">Contact</h2>
-    <form action="proses_contact.php" method="POST" class="w-50 mx-auto">
-      <div class="mb-3">
-        <label for="nama" class="form-label">Name</label>
-        <input type="text" name="nama" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" name="email" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label for="pesan" class="form-label">Message</label>
-        <textarea name="pesan" rows="4" class="form-control" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Send</button>
-    </form>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="bg-dark text-white text-center py-4 mt-5">
-  <div class="container">
-    <p class="mb-1">© 2025 DigitalMarket. All rights reserved.</p>
-    <small>Digital products marketplace for all your needs</small>
-  </div>
-</footer>
-
-<!-- Modal Overlay (for both checkout and payment) -->
-<div id="purchaseOverlay" class="modal-overlay d-none">
-  <!-- Checkout Container -->
-  <div id="checkoutContainer" class="checkout-container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2>Checkout</h2>
-      <button type="button" class="btn-close" onclick="closePurchaseFlow()"></button>
     </div>
-    
-    <input type="hidden" name="product_id" id="product_id">
-    <input type="hidden" name="product_name" id="product_name">
-    <input type="hidden" name="product_price" id="product_price">
+  </section>
 
-    <p><strong>Product:</strong> <span id="modal_product_name"></span></p>
-    <p><strong>Price:</strong> $<span id="modal_product_price"></span></p>
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="text-center mb-4">Contact Us</h2>
+      <form class="w-50 mx-auto">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Message</label>
+          <textarea class="form-control" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </form>
+    </div>
+  </section>
 
-    <div class="mb-3">
-      <label class="form-label">Name</label>
-      <input type="text" id="buyer_name" class="form-control" required>
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-1">© 2025 DigitalMarket. All rights reserved.</p>
+      <small>Digital products marketplace for all your needs</small>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Email</label>
-      <input type="email" id="buyer_email" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Payment Method</label>
-      <select id="payment_method" class="form-control" required>
-        <option value="Bank Transfer">Bank Transfer</option>
-        <option value="Credit Card">Credit Card</option>
-        <option value="PayPal">PayPal</option>
-        <option value="Other">Other</option>
-      </select>
-    </div>
-    
-    <div class="d-flex justify-content-between mt-4">
-      <button type="button" class="btn btn-secondary" onclick="closePurchaseFlow()">Cancel</button>
-      <button type="button" class="btn btn-success" onclick="showPaymentPage()">Pay Now</button>
-    </div>
-  </div>
-  
-  <!-- Payment Container (hidden initially) -->
-  <div id="paymentContainer" class="payment-container d-none">
-    <div class="payment-header">
+  </footer>
+
+  <!-- Checkout Modal -->
+  <div id="checkoutModal" class="modal-overlay d-none">
+    <div class="checkout-container">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-center">Payment Process</h2>
-        <button type="button" class="btn-close" onclick="closePurchaseFlow()"></button>
+        <h2>Checkout</h2>
+        <button type="button" class="btn-close" onclick="closeCheckout()"></button>
       </div>
-      
+
+      <div class="product-info">
+        <p><strong>Product:</strong> <span id="checkout-product-name"></span></p>
+        <p><strong>Price:</strong> $<span id="checkout-product-price"></span></p>
+        <p class="product-description" id="checkout-product-description"></p>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" id="checkout-name" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" id="checkout-email" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Payment Method</label>
+        <select id="checkout-payment-method" class="form-control" required>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Credit Card">Credit Card</option>
+          <option value="PayPal">PayPal</option>
+        </select>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-cancel" onclick="closeCheckout()">Cancel</button>
+        <button type="button" class="btn btn-success" onclick="processPayment()">Pay Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal-overlay d-none">
+    <div class="payment-container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Payment Process</h2>
+        <button type="button" class="btn-close" onclick="closePayment()"></button>
+      </div>
+
       <div class="payment-steps">
         <div class="step completed">
           <div class="step-number">1</div>
@@ -481,191 +559,111 @@
           <div class="step-number">3</div>
           <div class="step-title">Confirmation</div>
         </div>
+        <div class="step-line"></div>
+        <div class="step-progress" style="width: 50%;"></div>
       </div>
-    </div>
-    
-    <div class="row mb-4">
-      <div class="col-md-6">
-        <h4>Order Summary</h4>
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 id="payment-product-name"></h5>
-            <p>Price: $<span id="payment-product-price"></span></p>
-            <p>Payment Method: <span id="payment-method"></span></p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h4>Payment Details</h4>
-        <div id="bank-transfer-details" class="payment-method-details">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5>Bank Transfer</h5>
-              <p>Bank Name: ABC Bank</p>
-              <p>Account Number: 1234567890</p>
-              <p>Account Name: Digital Marketplace</p>
-              <p>Please include your order ID in the transfer note</p>
-            </div>
-          </div>
-        </div>
-        
-        <div id="credit-card-details" class="payment-method-details" style="display:none">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5>Credit Card</h5>
-              <div class="mb-3">
-                <label class="form-label">Card Number</label>
-                <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">Expiry Date</label>
-                  <input type="text" class="form-control" placeholder="MM/YY">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">CVV</label>
-                  <input type="text" class="form-control" placeholder="123">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div id="paypal-details" class="payment-method-details" style="display:none">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5>PayPal</h5>
-              <p>You will be redirected to PayPal to complete your payment</p>
-              <button class="btn btn-primary">Proceed to PayPal</button>
-            </div>
-          </div>
-        </div>
-        
-        <div id="other-details" class="payment-method-details" style="display:none">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5>Other Payment Method</h5>
-              <p>Please contact our support for alternative payment methods</p>
-              <p>Email: support@digitalmarket.com</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="d-flex justify-content-between">
-      <button class="btn btn-secondary" onclick="goBackToCheckout()">Back to Checkout</button>
-      <button class="btn btn-success" onclick="completePayment()">Complete Payment</button>
-    </div>
-  </div>
-</div>
 
-<!-- Payment Confirmation Modal -->
-<div class="modal fade" id="paymentConfirmationModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Payment Successful</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-        <div class="mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#198754" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-          </svg>
+      <div class="order-summary">
+        <h5>Order Summary</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Product:</strong> <span id="payment-product-name"></span></p>
+            <p><strong>Price:</strong> $<span id="payment-product-price"></span></p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Payment Method:</strong> <span id="payment-method"></span></p>
+          </div>
         </div>
-        <h4 class="mb-3">Thank you for your purchase!</h4>
-        <p>Your payment has been processed successfully.</p>
-        <p>We've sent the download link to <strong id="confirmation-email"></strong></p>
-        <p>Order ID: <strong>ORD-1234</strong></p>
       </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-primary" onclick="closeAllModals()">Back to Home</button>
+
+      <!-- Payment method details would go here -->
+      <div class="text-center mt-4">
+        <button class="btn btn-success" onclick="completePayment()">Complete Payment</button>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  function showBuyModal(id, name, price) {
-    // Set values
-    document.getElementById('product_id').value = id;
-    document.getElementById('product_name').value = name;
-    document.getElementById('product_price').value = price;
-    document.getElementById('modal_product_name').innerText = name;
-    document.getElementById('modal_product_price').innerText = price;
-    
-    // Show checkout in overlay
-    document.getElementById('purchaseOverlay').classList.remove('d-none');
-    document.getElementById('checkoutContainer').classList.remove('d-none');
-    document.getElementById('paymentContainer').classList.add('d-none');
-  }
-  
-  function showPaymentPage() {
-    // Get values from checkout form
-    const productName = document.getElementById('modal_product_name').innerText;
-    const productPrice = document.getElementById('modal_product_price').innerText;
-    const buyerName = document.getElementById('buyer_name').value;
-    const buyerEmail = document.getElementById('buyer_email').value;
-    const paymentMethod = document.getElementById('payment_method').value;
-    
-    // Validate form
-    if (!buyerName || !buyerEmail) {
-      alert('Please fill in all required fields');
-      return;
-    }
-    
-    // Set values in payment page
-    document.getElementById('payment-product-name').innerText = productName;
-    document.getElementById('payment-product-price').innerText = productPrice;
-    document.getElementById('payment-method').innerText = paymentMethod;
-    document.getElementById('confirmation-email').innerText = buyerEmail;
-    
-    // Show relevant payment method details
-    document.querySelectorAll('.payment-method-details').forEach(el => {
-      el.style.display = 'none';
-    });
-    
-    if (paymentMethod === 'Bank Transfer') {
-      document.getElementById('bank-transfer-details').style.display = 'block';
-    } else if (paymentMethod === 'Credit Card') {
-      document.getElementById('credit-card-details').style.display = 'block';
-    } else if (paymentMethod === 'PayPal') {
-      document.getElementById('paypal-details').style.display = 'block';
-    } else {
-      document.getElementById('other-details').style.display = 'block';
-    }
-    
-    // Switch to payment view
-    document.getElementById('checkoutContainer').classList.add('d-none');
-    document.getElementById('paymentContainer').classList.remove('d-none');
-  }
-  
-  function goBackToCheckout() {
-    document.getElementById('checkoutContainer').classList.remove('d-none');
-    document.getElementById('paymentContainer').classList.add('d-none');
-  }
-  
-  function closePurchaseFlow() {
-    document.getElementById('purchaseOverlay').classList.add('d-none');
-  }
-  
-  function completePayment() {
-    // Hide payment overlay
-    document.getElementById('purchaseOverlay').classList.add('d-none');
-    
-    // Show confirmation modal
-    var confirmationModal = new bootstrap.Modal(document.getElementById('paymentConfirmationModal'));
-    confirmationModal.show();
-  }
-  
-  function closeAllModals() {
-    bootstrap.Modal.getInstance(document.getElementById('paymentConfirmationModal')).hide();
-    // You could redirect to home page here if needed
-    // window.location.href = 'index.html';
-  }
-</script>
+  <!-- Confirmation Modal -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Payment Successful</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#198754"
+              class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+              <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </svg>
+          </div>
+          <h4 class="mb-3">Thank you for your purchase!</h4>
+          <p>Your payment has been processed successfully.</p>
+          <p>We've sent the download link to <strong id="confirmation-email"></strong></p>
+          <p>Order ID: <strong>ORD-
+              <?= rand(1000,9999) ?>
+            </strong></p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Back to Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Show checkout modal
+    function showCheckout(id, name, price, description) {
+      document.getElementById('checkout-product-name').textContent = name;
+      document.getElementById('checkout-product-price').textContent = price;
+      document.getElementById('checkout-product-description').textContent = description;
+      document.getElementById('checkoutModal').classList.remove('d-none');
+    }
+
+    // Close checkout modal
+    function closeCheckout() {
+      document.getElementById('checkoutModal').classList.add('d-none');
+    }
+
+    // Process payment
+    function processPayment() {
+      const name = document.getElementById('checkout-name').value;
+      const email = document.getElementById('checkout-email').value;
+      const paymentMethod = document.getElementById('checkout-payment-method').value;
+
+      if (!name || !email) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      // Set payment details
+      document.getElementById('payment-product-name').textContent =
+        document.getElementById('checkout-product-name').textContent;
+      document.getElementById('payment-product-price').textContent =
+        document.getElementById('checkout-product-price').textContent;
+      document.getElementById('payment-method').textContent = paymentMethod;
+      document.getElementById('confirmation-email').textContent = email;
+
+      // Show payment modal
+      closeCheckout();
+      document.getElementById('paymentModal').classList.remove('d-none');
+    }
+
+    // Close payment modal
+    function closePayment() {
+      document.getElementById('paymentModal').classList.add('d-none');
+    }
+
+    // Complete payment
+    function completePayment() {
+      closePayment();
+      var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+      confirmationModal.show();
+    }
+  </script>
 </body>
+
 </html>
